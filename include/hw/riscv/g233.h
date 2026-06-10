@@ -84,6 +84,10 @@ enum {
     VIRT_IMSIC_M,
     VIRT_IMSIC_S,
     VIRT_FLASH,
+    VIRT_WDT,
+    VIRT_GPIO,
+    VIRT_PWM,
+    VIRT_SPI,
     VIRT_DRAM,
     VIRT_PCIE_MMIO,
     VIRT_PCIE_PIO,
@@ -94,6 +98,9 @@ enum {
 
 enum {
     UART0_IRQ = 1,
+    GPIO_IRQ = 2,
+    WDT_IRQ = 4,
+    SPI_IRQ = 5,
     VIRTIO_IRQ = 6, /* 6 to 13 */
     VIRTIO_COUNT = 8,
     RTC_IRQ = 14,
