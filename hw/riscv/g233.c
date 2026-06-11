@@ -18,6 +18,7 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 #include "qemu/osdep.h"
 #include "qemu/units.h"
 #include "qemu/error-report.h"
@@ -60,6 +61,7 @@
 #include "hw/virtio/virtio-iommu.h"
 #include "hw/uefi/var-service-api.h"
 #include "hw/gpio/g233_gpio.h"
+#include "hw/watchdog/g233_wdt.h"
 
 /* KVM AIA only supports APLIC MSI. APLIC Wired is always emulated by QEMU. */
 static bool g233_use_kvm_aia_aplic_imsic(RISCVG233AIAType aia_type)
@@ -102,6 +104,7 @@ static const MemMapEntry virt_memmap[] = {
     [VIRT_IMSIC_S] =      { 0x28000000, VIRT_IMSIC_MAX_SIZE },
     [VIRT_PCIE_ECAM] =    { 0x30000000,    0x10000000 },
     [VIRT_PCIE_MMIO] =    { 0x40000000,    0x40000000 },
+    [VIRT_WDT] = { 0x10010000, 0x1000 },
     [VIRT_DRAM] =         { 0x80000000,           0x0 },
     [VIRT_GPIO] = { 0x10012000, 0x100 },
 };
@@ -1720,6 +1723,9 @@ static void virt_machine_init(MachineState *machine)
     /* G233 GPIO */
     sysbus_create_simple(TYPE_G233_GPIO, s->memmap[VIRT_GPIO].base,
         qdev_get_gpio_in(mmio_irqchip, GPIO_IRQ)); 
+
+    sysbus_create_simple(TYPE_G233_WATCHDOG, s->memmap[VIRT_WDT].base,
+        qdev_get_gpio_in(mmio_irqchip, WDT_IRQ));
 
     for (i = 0; i < ARRAY_SIZE(s->flash); i++) {
         /* Map legacy -drive if=pflash to machine properties */
