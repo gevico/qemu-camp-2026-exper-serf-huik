@@ -62,6 +62,7 @@
 #include "hw/uefi/var-service-api.h"
 #include "hw/gpio/g233_gpio.h"
 #include "hw/watchdog/g233_wdt.h"
+#include "hw/timer/g233_pwm.h"
 
 /* KVM AIA only supports APLIC MSI. APLIC Wired is always emulated by QEMU. */
 static bool g233_use_kvm_aia_aplic_imsic(RISCVG233AIAType aia_type)
@@ -107,6 +108,7 @@ static const MemMapEntry virt_memmap[] = {
     [VIRT_WDT] = { 0x10010000, 0x1000 },
     [VIRT_DRAM] =         { 0x80000000,           0x0 },
     [VIRT_GPIO] = { 0x10012000, 0x100 },
+    [VIRT_PWM] = { 0x10015000, 0x1000 },
 };
 
 /* PCIe high mmio is fixed for RV32 */
@@ -1726,6 +1728,9 @@ static void virt_machine_init(MachineState *machine)
 
     sysbus_create_simple(TYPE_G233_WATCHDOG, s->memmap[VIRT_WDT].base,
         qdev_get_gpio_in(mmio_irqchip, WDT_IRQ));
+    
+    sysbus_create_simple(TYPE_G233_PWM, s->memmap[VIRT_PWM].base,
+    qdev_get_gpio_in(mmio_irqchip, PWM_IRQ));
 
     for (i = 0; i < ARRAY_SIZE(s->flash); i++) {
         /* Map legacy -drive if=pflash to machine properties */
