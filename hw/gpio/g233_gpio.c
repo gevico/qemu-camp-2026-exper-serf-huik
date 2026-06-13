@@ -120,7 +120,7 @@ static void g233_gpio_class_init(ObjectClass *klass, const void *data)
 {
     DeviceClass *dc = DEVICE_CLASS(klass);
     dc->realize = g233_gpio_realize;
-    dc->legacy_reset   = g233_gpio_reset;
+    device_class_set_legacy_reset(dc, g233_gpio_reset);
 }
 
 static const TypeInfo g233_gpio_info = {

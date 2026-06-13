@@ -165,7 +165,7 @@ static void g233_wdt_class_init(ObjectClass *klass, const void *data)
 {
     DeviceClass *dc = DEVICE_CLASS(klass);
     dc->realize      = g233_wdt_realize;
-    dc->legacy_reset = g233_wdt_reset;
+    device_class_set_legacy_reset(dc, g233_wdt_reset);
 }
 
 static const TypeInfo g233_wdt_info = {

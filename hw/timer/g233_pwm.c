@@ -203,7 +203,7 @@ static void g233_pwm_class_init(ObjectClass *klass, const void *data)
 {
     DeviceClass *dc = DEVICE_CLASS(klass);
     dc->realize      = g233_pwm_realize;
-    dc->legacy_reset = g233_pwm_reset;
+    device_class_set_legacy_reset(dc, g233_pwm_reset);
 }
 
 static const TypeInfo g233_pwm_info = {
